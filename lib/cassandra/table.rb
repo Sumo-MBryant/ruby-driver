@@ -260,6 +260,8 @@ module Cassandra
         column_name = column.name
         return nil unless values.has_key?(column_name)
 
+        return values[column_name] if column.type.kind == :varchar
+
         buffer = Protocol::CqlByteBuffer.new
 
         if @release_version > '2.1'
