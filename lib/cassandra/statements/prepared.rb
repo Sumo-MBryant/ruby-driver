@@ -175,6 +175,8 @@ module Cassandra
           name     = metadata[2]
           type     = metadata[3]
 
+          return value if type.kind == :text
+
           if NOT_SET.eql?(value)
             raise ::ArgumentError, "argument #{name.inspect} is a part of " \
                                    'the partition key and must be present.'
