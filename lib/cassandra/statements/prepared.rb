@@ -167,7 +167,6 @@ module Cassandra
         return nil if partition_key.empty? || partition_key.size > values.size
         params_metadata = @params_metadata
 
-        buffer = Protocol::CqlByteBuffer.new
         if partition_key.one?
           i        = partition_key.first
           value    = values[i]
@@ -182,6 +181,8 @@ module Cassandra
                                    'the partition key and must be present.'
           end
 
+          buffer = Protocol::CqlByteBuffer.new
+
           if @connection_options.protocol_version >= 3
             Protocol::Coder.write_value_v3(buffer, value, type)
           else
@@ -191,6 +192,7 @@ module Cassandra
           buffer.discard(4) # discard size
         else
           buf = Protocol::CqlByteBuffer.new
+          buffer = Protocol::CqlByteBuffer.new
           partition_key.each do |ind|
             value    = values[ind]
             metadata = params_metadata[ind]
